@@ -74,6 +74,15 @@ function wfSyntaxHighlighterRender($input, array $args, Parser $parser, PPFrame 
 		'text'		=> 'Plain',
 		'plain'		=> 'Plain',
 		'xml'		=> 'Xml',
+		'html'	=> 'Xml',
+		'xhtml'	=> 'Xml',
+		'xslt'		=> 'Xml',
+		'sql'		=> 'Sql',
+		'ps'		=> 'PowerShell',
+		'powershell' => 'PowerShell',
+		'perl'	=> 'Perl',
+		'pl'		=> 'Perl',
+		'delphi'	=> 'Delphi',
 		'python'	=> 'Python',
 		'py'		=> 'Python',
 		'diff'		=> 'Diff',
@@ -81,12 +90,15 @@ function wfSyntaxHighlighterRender($input, array $args, Parser $parser, PPFrame 
 		'jscript'	=> 'JScript',
 		'javascript'	=> 'JScript',
 		'bash'		=> 'Bash',
-		'shell'		=> 'Bash'
+		'shell'		=> 'Bash',
+		'java'		=> 'Java'
 	);
 	
 	$alias = 'Plain';
 	if( isset( $syntaxAlias[$lang] ) ) {
 		$alias = $syntaxAlias[$lang];
+	} else {
+		$lang = 'plain';
 	}
 
 	if( count($wgSyntaxHighlighterSyntaxList) == 0) {
