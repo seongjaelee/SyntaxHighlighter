@@ -1,10 +1,41 @@
 <?php
+/**
+ * Syntax highlighting extension for MediaWiki 1.18 using SyntaxHighlighter
+ * Copyright (C) 2012 Seong Jae Lee <seongjae@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/**
+ * @file
+ * @ingroup Extensions
+ * @author Seong Jae Lee
+ * 
+ * This extension wraps SyntaxHighlighter: http://alexgorbatchev.com/SyntaxHighlighter/
+ */
+
 if( !defined( 'MEDIAWIKI' ) ) {
 	echo( "This is an extension to the MediaWiki package and cannot be run standalone.\n" );
 	die(-1);
 }
 
-$wgExtensionCredits['other'][] = array(
+$wgExtensionCredits['parserhook']['SyntaxHighlighter'] = array(
 	'path'		=> __FILE__,
 	'name'		=> 'SyntaxHighlighter',
 	'description'	=> 'uses alexgorbatchev.com/SyntaxHighlighter',
@@ -16,7 +47,6 @@ $wgSyntaxHighlighterSyntaxList = array();
 
 $wgHooks['ParserFirstCallInit'][] = 'wfSyntaxHighlighterParserInit';
 $wgHooks['ParserAfterTidy'][] = 'wfSyntaxHighlighterParserAfterTidy';
-$wgHooks['BeforePageDisplay'][] = 'wfSyntaxHighlighterBeforePageDisplay';
 
 function wfSyntaxHighlighterParserInit(Parser &$parser) {
 	$parser->setHook('source', 'wfSyntaxHighlighterRender');
@@ -94,9 +124,4 @@ function wfSyntaxHighlighterParserAfterTidy($parser, &$text) {
 	}
 	return true;
 }
-
-function wfSyntaxHighlighterBeforePageDisplay( OutputPage &$out, Skin &$skin ) {
-	return true;
-}
-
 ?>
