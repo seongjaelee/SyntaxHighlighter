@@ -64,6 +64,14 @@ function wfSyntaxHighlighterRender($input, array $args, Parser $parser, PPFrame 
 		$lang = $args['lang'];
 	}
 
+	$attribs = '';
+	foreach( $args as $key => $value ) {
+		if( $key == 'lang' ) {
+			continue;
+		}
+		$attribs = $attribs.'; '.$key.':'.$value;
+	}
+
 	$syntaxAlias = array(
 		'cpp'		=> 'Cpp',
 		'c'		=> 'Cpp',
@@ -74,13 +82,13 @@ function wfSyntaxHighlighterRender($input, array $args, Parser $parser, PPFrame 
 		'text'		=> 'Plain',
 		'plain'		=> 'Plain',
 		'xml'		=> 'Xml',
-		'html'	=> 'Xml',
-		'xhtml'	=> 'Xml',
+		'html'		=> 'Xml',
+		'xhtml'		=> 'Xml',
 		'xslt'		=> 'Xml',
 		'sql'		=> 'Sql',
 		'ps'		=> 'PowerShell',
-		'powershell' => 'PowerShell',
-		'perl'	=> 'Perl',
+		'powershell' 	=> 'PowerShell',
+		'perl'		=> 'Perl',
 		'pl'		=> 'Perl',
 		'delphi'	=> 'Delphi',
 		'python'	=> 'Python',
@@ -115,7 +123,7 @@ function wfSyntaxHighlighterRender($input, array $args, Parser $parser, PPFrame 
 		$wgSyntaxHighlighterSyntaxList[$lang] = $alias;
 	}
 
-	return '<pre class="brush:'.$lang.'">'.$input.'</pre>';
+	return '<pre class="brush:'.$lang.$attribs.'">'.$input.'</pre>';
 }
 
 function wfSyntaxHighlighterParserAfterTidy($parser, &$text) {
