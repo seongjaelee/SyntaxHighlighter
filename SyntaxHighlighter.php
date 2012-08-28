@@ -38,9 +38,10 @@ if( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['parserhook']['SyntaxHighlighter'] = array(
 	'path'		=> __FILE__,
 	'name'		=> 'SyntaxHighlighter',
-	'description'	=> 'uses alexgorbatchev.com/SyntaxHighlighter',
-	'version'	=> '1.0',
-	'author'	=> 'Seong Jae Lee'
+	'description'	=> 'A syntax highlighter extension using alexgorbatchev.com/SyntaxHighlighter',
+	'version'	=> '1.1',
+	'author'	=> 'Seong Jae Lee >> http://bluebrown.net',
+	'url'		=> 'https://www.mediawiki.org/wiki/Extgension:SyntaxHighlighter'
 );
 
 $wgSyntaxHighlighterSyntaxList = array();
@@ -131,16 +132,13 @@ function wfSyntaxHighlighterParserAfterTidy($parser, &$text) {
 	global $wgScriptPath;
 
 	if( count($wgSyntaxHighlighterSyntaxList) > 0 ) {
-		$prefix = $wgScriptPath.'/extensions/SyntaxHighlighter/syntaxhighlighter/scripts/shBrush';
-		$script = '<script type="text/javascript">';
-		$script = $script . 'SyntaxHighlighter.autoloader(';
-		foreach ($wgSyntaxHighlighterSyntaxList as $key => $value) {
-			$script = $script . '\''. $key . ' ' . $prefix . $value . '.js\',';
+		$scriptTxt = '<script type="text/javascript">SyntaxHighlighter.autoloader(';
+		foreach( $wgSyntaxHighlighterSyntaxList as $key => $value ) {
+			$scriptTxt = $scriptTxt.'\''.$key.' '.$prefixTxt.$value.'.js\',';
 		}
-		$script = substr($script, 0, -1);
-		$script = $script . '); SyntaxHighlighter.all();';
-		$script = $script . '</script>';
-		$text = $text . $script;
+		$scriptTxt = substr($scriptTxt, 0, -1);
+		$scriptTxt = $scriptTxt.'); SyntaxHighlighter.all();</script>';
+		$text = $text.$scriptTxt;
 	}
 	return true;
 }
