@@ -132,6 +132,7 @@ function wfSyntaxHighlighterParserAfterTidy($parser, &$text) {
 	global $wgScriptPath;
 
 	if( count($wgSyntaxHighlighterSyntaxList) > 0 ) {
+		$prefix = $wgScriptPath.'/extensions/SyntaxHighlighter/syntaxhighlighter/scripts/shBrush';
 		$scriptTxt = '<script type="text/javascript">SyntaxHighlighter.autoloader(';
 		foreach( $wgSyntaxHighlighterSyntaxList as $key => $value ) {
 			$scriptTxt = $scriptTxt.'\''.$key.' '.$prefixTxt.$value.'.js\',';
