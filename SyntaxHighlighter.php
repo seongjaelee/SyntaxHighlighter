@@ -1,6 +1,6 @@
 <?php
 /**
- * Syntax highlighting extension for MediaWiki 1.18 using SyntaxHighlighter
+ * Syntax highlighting extension for MediaWiki 1.18 and above using SyntaxHighlighter
  * Copyright (C) 2012 Seong Jae Lee <seongjae@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -39,7 +39,7 @@ $wgExtensionCredits['parserhook']['SyntaxHighlighter'] = array(
 	'path'		=> __FILE__,
 	'name'		=> 'SyntaxHighlighter',
 	'description'	=> 'A syntax highlighter extension using alexgorbatchev.com/SyntaxHighlighter',
-	'version'	=> '1.1',
+	'version'	=> '1.2',
 	'author'	=> 'Seong Jae Lee >> http://bluebrown.net',
 	'url'		=> 'https://www.mediawiki.org/wiki/Extgension:SyntaxHighlighter'
 );
@@ -47,7 +47,7 @@ $wgExtensionCredits['parserhook']['SyntaxHighlighter'] = array(
 $wgSyntaxHighlighterSyntaxList = array();
 
 $wgHooks['ParserFirstCallInit'][] = 'wfSyntaxHighlighterParserInit';
-$wgHooks['ParserAfterTidy'][] = 'wfSyntaxHighlighterParserAfterTidy';
+$wgHooks['OutputPageParserOutput'][] = 'wfSyntaxHighlighterOutputPageParserOutput';
 
 function wfSyntaxHighlighterParserInit(Parser &$parser) {
 	$parser->setHook('source', 'wfSyntaxHighlighterRender');
@@ -110,16 +110,6 @@ function wfSyntaxHighlighterRender($input, array $args, Parser $parser, PPFrame 
 		$lang = 'plain';
 	}
 
-	if( count($wgSyntaxHighlighterSyntaxList) == 0) {
-		global $wgScriptPath;
-		$directory = $wgScriptPath.'/extensions/SyntaxHighlighter';
-		$parser->getOutput()->addHeadItem( '
-		<script type="text/javascript" src="'.$directory.'/syntaxhighlighter/scripts/shCore.js"></script>
-		<script type="text/javascript" src="'.$directory.'/syntaxhighlighter/scripts/shAutoloader.js"></script>
-		<link rel="stylesheet" type="text/css" media="screen" href="'.$directory.'/syntaxhighlighter/styles/shCoreMinit.css" />
-		');
-	}
-
 	if( !in_array( $alias, $wgSyntaxHighlighterSyntaxList ) ) {
 		$wgSyntaxHighlighterSyntaxList[$lang] = $alias;
 	}
@@ -127,19 +117,21 @@ function wfSyntaxHighlighterRender($input, array $args, Parser $parser, PPFrame 
 	return '<pre class="brush:'.$lang.$attribs.'">'.$input.'</pre>';
 }
 
-function wfSyntaxHighlighterParserAfterTidy($parser, &$text) {
+function wfSyntaxHighlighterOutputPageParserOutput(OutputPage &$out, ParserOutput $parseroutput) {
 	global $wgSyntaxHighlighterSyntaxList;
 	global $wgScriptPath;
 
 	if( count($wgSyntaxHighlighterSyntaxList) > 0 ) {
-		$prefix = $wgScriptPath.'/extensions/SyntaxHighlighter/syntaxhighlighter/scripts/shBrush';
-		$scriptTxt = '<script type="text/javascript">SyntaxHighlighter.autoloader(';
+		$directory = $wgScriptPath.'/extensions/SyntaxHighlighter';
+		
+		$scriptTxt = "\n\r";
+		$scriptTxt = $scriptTxt.'<script type="text/javascript" src="'.$directory.'/syntaxhighlighter/scripts/shCore.js"></script>'."\n\r";
 		foreach( $wgSyntaxHighlighterSyntaxList as $key => $value ) {
-			$scriptTxt = $scriptTxt.'\''.$key.' '.$prefixTxt.$value.'.js\',';
+			$scriptTxt = $scriptTxt.'<script type="text/javascript" src="'.$directory.'/syntaxhighlighter/scripts/shBrush'.$value.'.js"></script>'."\n\r";
 		}
-		$scriptTxt = substr($scriptTxt, 0, -1);
-		$scriptTxt = $scriptTxt.'); SyntaxHighlighter.all();</script>';
-		$text = $text.$scriptTxt;
+		$scriptTxt = $scriptTxt.'<script type="text/javascript">SyntaxHighlighter.all();</script>'."\n\r";
+		$scriptTxt = $scriptTxt.'<link rel="stylesheet" type="text/css" media="screen" href="'.$directory.'/syntaxhighlighter/styles/shCoreMinit.css" />'."\n\r";
+		$out->addHeadItem('test', $scriptTxt);
 	}
 	return true;
 }
