@@ -47,7 +47,7 @@ $wgExtensionCredits['parserhook']['SyntaxHighlighter'] = array(
 $wgSyntaxHighlighterSyntaxList = array();
 
 $wgHooks['ParserFirstCallInit'][] = 'wfSyntaxHighlighterParserInit';
-$wgHooks['OutputPageParserOutput'][] = 'wfSyntaxHighlighterOutputPageParserOutput';
+$wgHooks['BeforePageDisplay'][] = 'wfSyntaxHighlighterBeforePageDisplay';
 
 function wfSyntaxHighlighterParserInit(Parser &$parser) {
 	$parser->setHook('source', 'wfSyntaxHighlighterRender');
@@ -117,7 +117,7 @@ function wfSyntaxHighlighterRender($input, array $args, Parser $parser, PPFrame 
 	return '<pre class="brush:'.$lang.$attribs.'">'.$input.'</pre>';
 }
 
-function wfSyntaxHighlighterOutputPageParserOutput(OutputPage &$out, ParserOutput $parseroutput) {
+function wfSyntaxHighlighterBeforePageDisplay(OutputPage &$out, Skin &$skin) {
 	global $wgSyntaxHighlighterSyntaxList;
 	global $wgScriptPath;
 
