@@ -143,9 +143,6 @@ class SyntaxHighlighter {
 			$scriptTxt = $scriptTxt.'<link rel="stylesheet" type="text/css" media="screen" href="'.$directory.'/syntaxhighlighter/styles/shCoreMinit.css" />'."\n\r";
 			$parser->GetOutput()->addHeadItem($scriptTxt);
 		}
-		else {
-			$parser->GetOutput()->addHeadItem('fuck you'.microtime());
-		}
 		
 		return true;
 	}
