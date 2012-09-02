@@ -43,13 +43,21 @@ On a wiki page, you can use "source" tags.
 Installation
 ------------
 The source code is hosted on Github and versioned using the Git tool (not SVN). So, you'll need Git to download or update the sources. Once git is installed, you can download the extension issuing the following command in the extensions/ directory:
+
     git clone git://github.com/seongjaelee/SyntaxHighlighter.git
+
 That would create directory SyntaxHighlighter/, which contains the needed files, right under extensions/.
 
+
 If you don't want to be bothered, you can just download the zip file from the following address:
+
     https://github.com/seongjaelee/SyntaxHighlighter/zipball/master
+
 Unzip the downloaded file in the extensions/ directory, and change the name of directory to SyntaxHighlighter/.
 
+
 Finally, add the following to LocalSettings.php:
+
     require_once("$IP/extensions/SyntaxHighlighter/SyntaxHighlighter.php");
+
 Many other syntax highlighting extensions also share source tag, so if you already use one, uncomment it from LocalSettings.php file.
