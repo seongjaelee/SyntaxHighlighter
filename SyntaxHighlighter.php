@@ -78,7 +78,7 @@ class SyntaxHighlighter {
 			if( $key == 'lang' ) {
 				continue;
 			}
-			$attribs = $attribs.'; '.$key.':'.$value;
+			$attribs = $attribs.'; '.$key.':'.'\''.$value.'\'';
 		}
 	
 		$syntaxAlias = array(
