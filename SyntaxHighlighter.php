@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
  * of the Software, and to permit persons to whom the Software is furnished to do
  * so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +26,7 @@
  * @file
  * @ingroup Extensions
  * @author Seong Jae Lee
- * 
+ *
  * This extension wraps SyntaxHighlighter: http://alexgorbatchev.com/SyntaxHighlighter/
  */
 
@@ -49,30 +49,30 @@ $wgHooks['ParserFirstCallInit'][] = 'SyntaxHighlighter::setHooks';
 class SyntaxHighlighter {
 	var $mSyntaxList = array();
 	static protected $hookInstalled = false;
-	
+
 	static function setHooks( $parser ) {
 		global $wgHooks;
-		
+
 		$parser->extSyntaxHighlighter = new self();
 		if( !SyntaxHighlighter::$hookInstalled ) {
 			$wgHooks['ParserAfterTidy'][] = array( $parser->extSyntaxHighlighter, 'addHeadItems' );
 			SyntaxHighlighter::$hookInstalled = true;
 		}
 		$parser->setHook( 'source', array( $parser->extSyntaxHighlighter, 'source' ) );
-		
+
 		return true;
 	}
-	
+
 	function source( $input, array $args, Parser $parser ) {
-		
+
 		$input = str_replace('<', '&lt;', $input);
 		$input = str_replace('>', '&gt;', $input);
-		
+
 		$lang = 'plain';
 		if( isset( $args['lang'] ) && $args['lang'] ) {
 			$lang = $args['lang'];
 		}
-	
+
 		$attribs = '';
 		foreach( $args as $key => $value ) {
 			if( $key == 'lang' ) {
@@ -80,7 +80,7 @@ class SyntaxHighlighter {
 			}
 			$attribs = $attribs.'; '.$key.':'.'\''.$value.'\'';
 		}
-	
+
 		$syntaxAlias = array(
 			'cpp'		=> 'Cpp',
 			'c'		=> 'Cpp',
@@ -102,6 +102,8 @@ class SyntaxHighlighter {
 			'delphi'	=> 'Delphi',
 			'python'	=> 'Python',
 			'py'		=> 'Python',
+			'ruby'		=> 'Ruby',
+			'rb'		=> 'Ruby',
 			'diff'		=> 'Diff',
 			'js'		=> 'JScript',
 			'jscript'	=> 'JScript',
@@ -110,18 +112,18 @@ class SyntaxHighlighter {
 			'shell'		=> 'Bash',
 			'java'		=> 'Java'
 		);
-		
+
 		$alias = 'Plain';
 		if( isset( $syntaxAlias[$lang] ) ) {
 			$alias = $syntaxAlias[$lang];
 		} else {
 			$lang = 'plain';
 		}
-	
+
 		if( !in_array( $alias, $this->mSyntaxList ) ) {
 			$this->mSyntaxList[$lang] = $alias;
 		}
-	
+
 		return '<pre class="brush:'.$lang.$attribs.'">'.$input.'</pre>';
 	}
 
@@ -129,11 +131,11 @@ class SyntaxHighlighter {
 		if( $parser->extSyntaxHighlighter !== $this ) {
 			return $parser->extSyntaxHighlighter->addHeadItems( $parser, $text );
 		}
-		
+
 		if( count($this->mSyntaxList) > 0 ) {
 			global $wgScriptPath;
 			$directory = $wgScriptPath.'/extensions/SyntaxHighlighter';
-		
+
 			$scriptTxt = "\n\r";
 			$scriptTxt = $scriptTxt.'<script type="text/javascript" src="'.$directory.'/syntaxhighlighter/scripts/shCore.js"></script>'."\n\r";
 			foreach( $this->mSyntaxList as $key => $value ) {
@@ -143,7 +145,7 @@ class SyntaxHighlighter {
 			$scriptTxt = $scriptTxt.'<link rel="stylesheet" type="text/css" media="screen" href="'.$directory.'/syntaxhighlighter/styles/shCoreMinit.css" />'."\n\r";
 			$parser->GetOutput()->addHeadItem($scriptTxt);
 		}
-		
+
 		return true;
 	}
 }
