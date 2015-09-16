@@ -61,3 +61,15 @@ Finally, add the following to LocalSettings.php:
     require_once("$IP/extensions/SyntaxHighlighter/SyntaxHighlighter.php");
 
 Many other syntax highlighting extensions also share source tag, so if you already use one, uncomment it from LocalSettings.php file.
+
+Options
+-------
+It also provides user-configurable options that goes to [SyntaxHighlighter.defaults](http://alexgorbatchev.com/SyntaxHighlighter/manual/configuration/#syntaxhighlighterdefaults).
+
+For example, you can add the following to the `LocalSettings.php`.
+
+```php
+$wgSyntaxHighlighterOptions['smart-tabs'] = 'true';
+```
+
+Note that all array values are strings.
