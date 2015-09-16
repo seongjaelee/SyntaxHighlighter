@@ -35,6 +35,15 @@ if( !defined( 'MEDIAWIKI' ) ) {
 	die(-1);
 }
 
+/**
+ * Options:
+ * $wgSyntaxHighlighterOptions
+ *	An array that goes into SyntaxHighlighter.defaults. Note that array keys and values are ALWAYS strings.
+ *	For more information, refer http://alexgorbatchev.com/SyntaxHighlighter/manual/configuration/#syntaxhighlighterdefaults
+ *	For example, `$wgSyntaxHighlighterOption['auto-links'] = 'true';`.
+ */
+$wgSyntaxHighlighterOptions = array();
+
 $wgExtensionCredits['parserhook']['SyntaxHighlighter'] = array(
 	'path'		=> __FILE__,
 	'name'		=> 'SyntaxHighlighter',
@@ -134,6 +143,7 @@ class SyntaxHighlighter {
 
 		if( count($this->mSyntaxList) > 0 ) {
 			global $wgScriptPath;
+			global $wgSyntaxHighlighterOptions;
 			$directory = $wgScriptPath.'/extensions/SyntaxHighlighter';
 
 			$scriptTxt = "\n\r";
@@ -141,7 +151,12 @@ class SyntaxHighlighter {
 			foreach( $this->mSyntaxList as $key => $value ) {
 				$scriptTxt = $scriptTxt.'<script type="text/javascript" src="'.$directory.'/syntaxhighlighter/scripts/shBrush'.$value.'.js"></script>'."\n\r";
 			}
-			$scriptTxt = $scriptTxt.'<script type="text/javascript">SyntaxHighlighter.all();</script>'."\n\r";
+			$scriptTxt = $scriptTxt.'<script type="text/javascript">'."\n\r";
+			foreach( $wgSyntaxHighlighterOptions as $key => $value ) {
+				$scriptTxt = $scriptTxt.'SyntaxHighlighter.defaults["'.$key.'"] = '.$value.';'."\n\r";
+			}
+			$scriptTxt = $scriptTxt.'SyntaxHighlighter.all();'."\n\r";
+			$scriptTxt = $scriptTxt.'</script>'."\n\r";
 			$scriptTxt = $scriptTxt.'<link rel="stylesheet" type="text/css" media="screen" href="'.$directory.'/syntaxhighlighter/styles/shCoreMinit.css" />'."\n\r";
 			$parser->GetOutput()->addHeadItem($scriptTxt);
 		}
